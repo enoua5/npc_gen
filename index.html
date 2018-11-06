@@ -24,6 +24,17 @@
       {
         font-size: 0.75em;
       }
+      
+      @media print
+      {
+        form, #copyright, body>hr{display: none;}
+        #sheet
+        {
+          margin-top: 0;
+          border: none;
+          width: 100%;
+        }
+      }
     </style>
     <script>
       function l(what){return document.getElementById(what);}
