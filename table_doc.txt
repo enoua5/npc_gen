@@ -1,0 +1,20 @@
+*** Race Table Documentation ***
+
+The roll table is specified in three parts, seperated by the `:` character. These three parts are `<uncommon>:<common>:<rare>`.
+
+For each section, a series of letters is used to denote races in each catagory. The letters are as follows (capitalization matters):
+
+E - Elf
+h - Halfling
+D - Dwarf
+H - Human
+d - Dragonborn
+G - Gnome
+e - Half-elf
+O - Half-orc
+T - Tiefling
+
+The selected races are added to a pool, from which a random one will be chosen.
+
+Each letter in the uncommon catagory will be added to the pool once, whereas common will be added 16 times. Letters in the rare catagory are added once to the Exotic pool. There is an entry on the regular table that, if picked, will roll from the exotic pool; this makes them rarer.
+
