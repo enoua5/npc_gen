@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <style>
+      body
+      {
+        text-align: center;
+      }
+      #sheet
+      {
+        margin-top: 1em;
+        border: 1px solid black;
+        padding: 1em;
+        width: 50%;
+        display: inline-block;
+      }
+      .row
+      {
+        display: flex;
+        justify-content: space-between;
+      }
+      #copyright
+      {
+        font-size: 0.75em;
+      }
+    </style>
+    <script>
+      function l(what){return document.getElementById(what);}
+    
+      var Module={
+        onRuntimeInitialized: function() {
+          l("sub_btn").disabled=false;
+          l("sub_btn").value="Generate";
+          
+          gen_new(); //just to start with the fields filled
+        }
+      };
+      
+      function update_table()
+      {
+        l("race_table").value=l("presets").value;
+      }
+      function gen_new()
+      {
+        let char=Module.make_npc(l("race_table").value);
+        
+        l("name").innerText=char.name;
+        l("sex").innerText=char.sex;
+        l("race").innerText=char.race;
+        l("occupation").innerText=char.occupation;
+        
+        l("hp").innerText=char.hp;
+        l("ac").innerText=char.ac;
+        l("speed").innerText=char.speed;
+        
+        for(s of ["str", "dex", "con", "int", "wis", "cha"])
+        {
+          l(s+"_r").innerText=char[s].roll;
+          l(s+"_a").innerText=char[s].adj;
+          l(s+"_s").innerText=char[s].score;
+          l(s+"_m").innerText=char[s].mod;
+          //I know this is gross, but oh well.
+          l(s+"_r").style.border="1px solid black";
+          l(s+"_a").style.border="1px solid black";
+          l(s+"_s").style.border="1px solid black";
+          l(s+"_m").style.border="1px solid black";
+        }
+        
+        l("weapon").innerText=char.weapon;
+        l("toHit").innerText=char.toHit;
+        l("dmg").innerText=char.dmg;
+        
+        l("gear").innerText=char.gear;
+        l("traits").innerText=char.traits;
+        l("quirks").innerText=char.quirks;
+        l("bond").innerText=char.bonds;
+      }
+    </script>
+    <script src="npc_gen.js"></script>
+  </head>
+  <body>
+    <form action="javascript:gen_new()">
+      <select id="presets" onchange="update_table()">
+        <option value="">Select a preset race roll-table</option>
+        <option value="EhDHdGeOT::">Even-Odds</option>
+        <option value="EhD:H:dGeOT">Human-Centric</option>
+        <option value="HhDe:E:dGOT">Elf-Centric</option>
+      </select>
+      <input type="text" id="race_table" placeholder="or define your own"></input>
+      <input type="submit" id="sub_btn" value="Loading..." disabled/>
+    </form>
+    
+    <div id="sheet">
+      <div class="row">
+        <p>Name: <span id="name"></span></p>
+        <p>Sex: <span id="sex"></span></p>
+      </div>
+      <div class="row">
+        <p>Race: <span id="race"></span></p>
+      </div>
+      <div class="row">
+        <p>Occupation: <span id="occupation"></span></p>
+      </div>
+      <div class="row">
+        <p>Hit Points: <span id="hp"></span></p>
+        <p>Armor Class: <span id="ac"></span></p>
+        <p>Speed: <span id="speed"></span></p>
+      </div>
+      <hr/>
+      <table style="width: 100%; text-align: center">
+        <tr>
+          <th>Roll</th>
+          <th></th>
+          <th>Adj</th>
+          <th></th>
+          <th>Total</th>
+          <th></th>
+          <th>Modifier</th>
+        </tr>
+        <tr>
+          <td id="str_r"></td>
+          <td>+</td>
+          <td id="str_a"></td>
+          <td>=</td>
+          <td id="str_s"></td>
+          <td>STR</td>
+          <td id="str_m"></td>
+        </tr>
+        <tr>
+          <td id="dex_r"></td>
+          <td>+</td>
+          <td id="dex_a"></td>
+          <td>=</td>
+          <td id="dex_s"></td>
+          <td>DEX</td>
+          <td id="dex_m"></td>
+        </tr>
+        <tr>
+          <td id="con_r"></td>
+          <td>+</td>
+          <td id="con_a"></td>
+          <td>=</td>
+          <td id="con_s"></td>
+          <td>CON</td>
+          <td id="con_m"></td>
+        </tr>
+        <tr>
+          <td id="int_r"></td>
+          <td>+</td>
+          <td id="int_a"></td>
+          <td>=</td>
+          <td id="int_s"></td>
+          <td>INT</td>
+          <td id="int_m"></td>
+        </tr>
+        <tr>
+          <td id="wis_r"></td>
+          <td>+</td>
+          <td id="wis_a"></td>
+          <td>=</td>
+          <td id="wis_s"></td>
+          <td>WIS</td>
+          <td id="wis_m"></td>
+        </tr>
+        <tr>
+          <td id="cha_r"></td>
+          <td>+</td>
+          <td id="cha_a"></td>
+          <td>=</td>
+          <td id="cha_s"></td>
+          <td>CHA</td>
+          <td id="cha_m"></td>
+        </tr>
+      </table>
+      <hr/>
+      <div class="row">
+        <p>Weapon: <span id="weapon"></span></p>
+      </div>
+      <div class="row">
+        <p>To Hit: <span id="toHit"></span></p>
+        <p>Dmg: <span id="dmg"></span></p>
+      </div>
+      <hr/>
+      <div class="row">
+        <p>Gear: <span id="gear"></span></p>
+      </div>
+      <div class="row">
+        <p>Racial Traits: <span id="traits"></span></p>
+      </div>
+      <div class="row">
+        <p>Quirks: <span id="quirks"></span></p>
+      </div>
+      <div class="row">
+        <p>Bond Stat: <span id="bond"></span></p>
+      </div>
+    </div>
+    <hr/>
+    <div id="copyright">
+      <p>This application uses content from multiple sources released under <a href="OGL.txt">OGL</a>:</p>
+
+      <p>System Reference Document 5.0 Copyright 2016, Wizards of the Coast, Inc.; Authors Mike Mearls, Jeremy Crawford, Chris Perkins, Rodney Thompson, Peter Lee, James Wyatt, Robert J. Schwalb, Bruce R. Cordell, Chris Sims, and Steve Townshend, based on original material by E. Gary Gygax and Dave Arneson.</p>
+
+      <p>System Reference Document. Copyright 2000, Wizards of the Coast, Inc.; Authors Jonathan Tweet, Monte Cook, Skip williams, based on original material by E. Gary Gygax and Dave Arneson.</p>
+
+      <p>DCC RPG. Copyright 2012, Goodman Games all rights reserved. Visit www.goodman-games.com or contact info@goodman-games.com.</p>
+
+      <p>Fifth Edition Funnel. Copyright 2016, Ten Red Crows Press. By Ken Sturgis and Dani Ausen. All rights reserved.</p>
+    </div>
+  </body>
+</html>
