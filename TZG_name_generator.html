@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tezago Name Generaor</title>
+    <style>
+    
+    </style>
+    <script>
+      function onload()
+      {
+        display_names();
+      }
+      
+      function display_names()
+      {
+        document.getElementById("names").innerHTML="";
+        for(let i=0; i<10; i++)
+        {
+          let li=document.createElement("li");
+          li.innerText=gen_name();
+          document.getElementById("names").append(li);
+        }
+        
+      }
+      
+      MathExt={
+        randomZipf:function(a){
+          let b=a.map((i,n)=>({
+            value:i,
+            weight:(1/(n+1))
+          }));
+          return MathExt.weightedRandom(b);
+        },
+        weightedRandom:function(a){
+          let b=[];
+          for(i of a)
+            for(j=0; j<i.weight*100; j++)
+              b.push(i.value);
+          return MathExt.randomFrom(b);
+        },
+        randomFrom(a){
+          return a[Math.floor(Math.random()*a.length)];
+        }
+      }
+      
+      
+      function gen_name()
+      {
+        function gen_word()
+        {
+          //sorted by usage
+          let c=["m","n","l","k","t","g","'","s","v","d","ñ",
+                     "ts","b","f","y","h","z","q","p","j","x","zh",
+                     "dh","sh","hy","dz","dw","my","tw","py", "dr", "th","gw",
+                     "sw","vw","bw","zw","fy","xw","tsy","zhw","dzw"];
+          let v=["ii","a","o","ei","uu","e","û","ao","ai","iu","î","æ"];
+          function gen_syl()
+          {
+          
+            let cs=MathExt.randomZipf(c);
+            let vs=MathExt.randomZipf(v);
+            
+            //reduce chance of repeated sounds
+            c=c.filter((n)=>n!=cs);
+            c.push(cs);
+            v=v.filter((n)=>n!=vs);
+            v.push(vs);
+            
+            return cs+vs;
+          }
+          
+          let num_syls=MathExt.weightedRandom([
+            {value: 1, weight:0.5},
+            {value: 2, weight:1},
+            {value: 3, weight:0.1},
+            {value: 4, weight:0.05},
+          ]);
+          let out="";
+          for(let i=0; i<num_syls; i++)
+            out+=gen_syl();
+          
+          return out;
+        }
+        function gen_ending()
+        {
+          let endings=[
+            {value:'l (male)',weight:0.5},
+            {value:'n (female)',weight:0.5},
+            
+            {value:'s (nonbinary)',weight:0.1},
+            {value:'ln (bigender)',weight:0.05},
+            {value:'ls (masculine nonbinary)',weight:0.06},
+            {value:'ns (feminine nonbinary)',weight:0.06},
+            {value:'lns (omnigender)',weight:0.03},
+            {value:' (agender)',weight:0.06},
+            
+            {value:'lj (male demon)',weight:0.25},
+            {value:'nj (female demon)',weight:0.25},
+            
+            {value:'sj (nonbinary demon)',weight:0.05},
+            {value:'lnj (bigender demon)',weight:0.03},
+            {value:'lsj (masculine nonbinary demon)',weight:0.03},
+            {value:'snj (feminine nonbinary demon)',weight:0.03},
+            {value:'slnj (omnigender demon)',weight:0.01},
+            {value:'j (agender demon)',weight:0.03},
+            
+            {value:'lth (male deity)',weight:0.25},
+            {value:'nth (female deity)',weight:0.25},
+            
+            {value:'sth (nonbinary deity)',weight:0.05},
+            {value:'lnth (bigender deity)',weight:0.03},
+            {value:'lsth (masculine nonbinary deity)',weight:0.03},
+            {value:'snth (feminine nonbinary deity)',weight:0.03},
+            {value:'slnth (omnigender deity)',weight:0.01},
+            {value:'jth (agender deity)',weight:0.03},
+          ];
+          let out=MathExt.weightedRandom(endings);
+          
+          return out;
+        }
+        return `${gen_word()} ${gen_word()}${gen_ending()}`
+      }
+    </script>
+  </head>
+  <body onload="onload()">
+    <ul id="names">
+      <li>It appears javascript is not enabled. What is this, 2005?</li>
+    </ul>
+    <button onclick="display_names()">More</button>
+  </body>
+</html>
